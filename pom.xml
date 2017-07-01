@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.sourcedestination</groupId>
+    <artifactId>sai-rhog</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.sourcedestination</groupId>
+            <artifactId>funcles</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourcedestination</groupId>
+            <artifactId>sai</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- RHOG dependencies: may need tweaking to match jars in rhog repo /-->
+
+        <!-- this is a non-maven github project I packaged as part of this project -->
+        <dependency>
+            <groupId>github.santiontanon</groupId>
+            <artifactId>rhog</artifactId>
+            <version>2017-07-01</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/rhog-2017-07-01.jar</systemPath>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.20</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jdom/jdom -->
+        <dependency>
+            <groupId>jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.prefuse/prefuse -->
+        <dependency>
+            <groupId>org.prefuse</groupId>
+            <artifactId>prefuse</artifactId>
+            <version>beta-20071021</version>
+        </dependency>
+    </dependencies>
+</project>
