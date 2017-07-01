@@ -15,14 +15,14 @@ import java.util.Iterator;
  */
 public class GMLUtil {
 
-    public Iterator<SaiDlg> gmlCollectionToDLG(final BufferedReader in) {
+    public static Iterator<SaiDlg> gmlCollectionToDLG(final BufferedReader in) {
         final GMLBridge bridge = new GMLBridge();
         return new Iterator<SaiDlg>() {
             SaiDlg g = null;
 
             private void peekNextGraph() {
                 try {
-                    g = (SaiDlg)bridge.load(in);
+                    g = new SaiDlg(bridge.load(in));
                 } catch (Exception e) { g = null; }
             }
 
@@ -43,7 +43,9 @@ public class GMLUtil {
             @Override
             public SaiDlg next() {
                 if(g == null) peekNextGraph();
-                return g;
+                SaiDlg ret = g;
+                g = null;
+                return ret;
             }
         };
     }

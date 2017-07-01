@@ -4,6 +4,13 @@ import com.google.common.collect.Sets;
 import net.sourcedestination.sai.graph.*;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -11,6 +18,19 @@ import static org.junit.Assert.assertNotNull;
  * Created by jmorwick on 7/1/17.
  */
 public class GMLUtilTest {
+
+
+    @Test
+    public void testLoadGMLFile() throws Exception {
+        File f = new File(getClass().getClassLoader().getResource("sponge-instances.gml").getFile());
+        BufferedReader in = new BufferedReader(new FileReader(f));
+        Set<SaiDlg> graphs = new HashSet<>();
+        for(Iterator<SaiDlg> i = GMLUtil.gmlCollectionToDLG(in);
+            i.hasNext();
+            graphs.add(i.next()));
+
+        assertEquals(503, graphs.size());
+    }
 
     @Test
     public void testSaveLoadGML() {
