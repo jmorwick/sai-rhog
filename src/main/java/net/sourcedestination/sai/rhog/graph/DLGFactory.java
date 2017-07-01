@@ -28,10 +28,11 @@ public class DLGFactory implements GraphFactory<SaiDlgAdapter> {
         this.defaultLabel = defaultLabel;
     }
 
-    public DLG copyToDLG(Graph g) {
+    @Override
+    public SaiDlg copy(Graph g) {
         List<Integer> nodeIds = new ArrayList<>(g.getNodeIDsSet());
         Map<Integer,Integer> nodeIdMap = new HashMap<>();
-        DLG gc = new DLG(nodeIds.size());
+        SaiDlg gc = new SaiDlg(nodeIds.size());
         for(int i=0; i<nodeIds.size(); i++) {
             Feature f = g.getNodeFeature(featureName, nodeIds.get(i));
             String labelValue = f == null ? defaultLabel : f.getValue();
@@ -52,10 +53,5 @@ public class DLGFactory implements GraphFactory<SaiDlgAdapter> {
         });
 
         return gc;
-    }
-
-    @Override
-    public SaiDlgAdapter copy(Graph g) {
-        return (SaiDlgAdapter)copyToDLG(g);
     }
 }

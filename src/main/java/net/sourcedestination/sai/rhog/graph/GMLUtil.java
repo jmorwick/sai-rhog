@@ -15,14 +15,14 @@ import java.util.Iterator;
  */
 public class GMLUtil {
 
-    public Iterator<SaiDlgAdapter> GmlCollectionToDLG(final BufferedReader in) {
+    public Iterator<SaiDlg> gmlCollectionToDLG(final BufferedReader in) {
         final GMLBridge bridge = new GMLBridge();
-        return new Iterator<SaiDlgAdapter>() {
-            SaiDlgAdapter g = null;
+        return new Iterator<SaiDlg>() {
+            SaiDlg g = null;
 
             private void peekNextGraph() {
                 try {
-                    g = (SaiDlgAdapter)bridge.load(in);
+                    g = (SaiDlg)bridge.load(in);
                 } catch (Exception e) { g = null; }
             }
 
@@ -41,14 +41,14 @@ public class GMLUtil {
             }
 
             @Override
-            public SaiDlgAdapter next() {
+            public SaiDlg next() {
                 if(g == null) peekNextGraph();
                 return g;
             }
         };
     }
 
-    public static String DlgToGml(DLG g) {
+    public static String dlgToGml(DLG g) {
         GMLBridge bridge = new GMLBridge();
         StringWriter sw = new StringWriter();
         try { bridge.save(g, sw); }
@@ -56,23 +56,23 @@ public class GMLUtil {
         return sw.getBuffer().toString();
     }
 
-    public static String SaiToGml(Graph g, String featureName, String defaultLabel) {
+    public static String saiToGml(Graph g, String featureName, String defaultLabel) {
         DLGFactory f = new DLGFactory(featureName, defaultLabel);
-        return DlgToGml(f.copyToDLG(g));
+        return dlgToGml(f.copy(g));
     }
 
     /** reference this static method as a deserializer object where needed */
-    public static SaiDlgAdapter GmlToDlg(String gml) {
+    public static SaiDlg gmlToDlg(String gml) {
         GMLBridge bridge = new GMLBridge();
         try {
-            return (SaiDlgAdapter)bridge.load(new BufferedReader(new StringReader(gml)));
+            return new SaiDlg(bridge.load(new BufferedReader(new StringReader(gml))));
         } catch(Exception e) {
             return null;
         }
     }
 
     /** reference this static method as a serializer object where needed */
-    public static String SaiToGml(Graph g) {
-        return SaiToGml(g,"","");
+    public static String saiToGml(Graph g) {
+        return saiToGml(g,"","");
     }
 }

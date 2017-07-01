@@ -12,11 +12,6 @@ import java.util.stream.Stream;
  *  An adapter to the SAI Graph interface for RhoG directed labeled graph objects as SAI.
  *  Node ids are preserved whereas edge id's are the sum of the source node id multiplied
  *  by the number of nodes and the target node id.
- *
- *  All SAI methods are implemented as default methods so that DLG objects can be cast to
- *  this interface in order to be used as SAI graph. Only DLG objects are intended to be
- *  cast to this interface. Though it is not type-safe, always assume SaiDlgAdapters can
- *  be cast back to DLG objects.
  */
 public interface SaiDlgAdapter extends Graph {
 
@@ -32,12 +27,12 @@ public interface SaiDlgAdapter extends Graph {
 
     @Override
     public default Stream<Integer> getNodeIDs() {
-        return IntStream.range(1, getNVertices()).mapToObj(Integer::new);
+        return IntStream.range(0, getNVertices()).mapToObj(Integer::new);
     }
 
     @Override
     public default Stream<Integer> getEdgeIDs() {
-        return IntStream.range(1, getNVertices()*getNVertices())
+        return IntStream.range(0, getNVertices()*getNVertices())
                 .filter(id -> getEdge(id/getNVertices(), id%getNVertices()) != null)
                 .mapToObj(Integer::new);
     }
@@ -59,7 +54,7 @@ public interface SaiDlgAdapter extends Graph {
 
     @Override
     public default Stream<Feature> getEdgeFeatures(int eid) {
-        Label l = this.getEdge(eid/getNVertices(), eid%getNVertices());
+        Label l = getEdge(eid/getNVertices(), eid%getNVertices());
         return l == null ? Stream.empty() :
                 Stream.of(new Feature(getLabelName(), l.get()));
     }
