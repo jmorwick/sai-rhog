@@ -51,11 +51,7 @@ public class GMLUtil {
     }
 
     public static String dlgToGml(DLG g) {
-        GMLBridge bridge = new GMLBridge();
-        StringWriter sw = new StringWriter();
-        try { bridge.save(g, sw); }
-        catch (Exception e) { return null; }
-        return sw.getBuffer().toString();
+        return FileFormatUtil.serialize(g, new GMLBridge());
     }
 
     public static String saiToGml(Graph g, String featureName, String defaultLabel) {
@@ -65,12 +61,8 @@ public class GMLUtil {
 
     /** reference this static method as a deserializer object where needed */
     public static SaiDlg gmlToDlg(String gml) {
-        GMLBridge bridge = new GMLBridge();
-        try {
-            return new SaiDlg(bridge.load(new BufferedReader(new StringReader(gml))));
-        } catch(Exception e) {
-            return null;
-        }
+        DLGReader reader = new GMLBridge()::load;
+        return reader.apply(gml);
     }
 
     /** reference this static method as a serializer object where needed */
