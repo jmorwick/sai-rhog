@@ -1,6 +1,8 @@
 package net.sourcedestination.sai.rhog.graph;
 
 import com.google.common.collect.Sets;
+import dlg.core.DLG;
+import dlg.core.TreeDLG;
 import net.sourcedestination.sai.graph.*;
 import org.junit.Test;
 
@@ -13,6 +15,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by jmorwick on 7/1/17.
@@ -24,10 +27,10 @@ public class GMLUtilTest {
     public void testLoadGMLFile() throws Exception {
         File f = new File(getClass().getClassLoader().getResource("sponge-instances.gml").getFile());
         BufferedReader in = new BufferedReader(new FileReader(f));
-        Set<SaiDlg> graphs = new HashSet<>();
-        for(Iterator<SaiDlg> i = GMLUtil.gmlCollectionToDLG(in);
+        Set<DLG> graphs = new HashSet<>();
+        for(Iterator<SaiDlgAdapter> i = GMLUtil.gmlCollectionToDLG(in);
             i.hasNext();
-            graphs.add(i.next()));
+            graphs.add((DLG)i.next()));
 
         assertEquals(503, graphs.size());
     }
@@ -51,6 +54,8 @@ public class GMLUtilTest {
         Graph g2 = deserializer.apply(gml);
 
         assertNotNull(g2);
+        assertTrue(g2 instanceof SaiDlgAdapter);
+        assertTrue(g2 instanceof DLG);
         assertEquals(g.getEdgeIDsSet().size(), g2.getEdgeIDsSet().size());
         assertEquals(g.getNodeIDsSet().size(), g2.getNodeIDsSet().size());
         assertEquals(g.getEdgeSourceNodeID(0), g2.getEdgeSourceNodeID(0*3 + 1));

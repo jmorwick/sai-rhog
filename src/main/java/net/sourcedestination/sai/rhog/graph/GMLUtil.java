@@ -2,6 +2,7 @@ package net.sourcedestination.sai.rhog.graph;
 
 import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
+import dlg.core.TreeDLG;
 import net.sourcedestination.sai.graph.Graph;
 
 import java.io.BufferedReader;
@@ -15,14 +16,17 @@ import java.util.Iterator;
  */
 public class GMLUtil {
 
-    public static Iterator<SaiDlg> gmlCollectionToDLG(final BufferedReader in) {
+    public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
         final GMLBridge bridge = new GMLBridge();
-        return new Iterator<SaiDlg>() {
-            SaiDlg g = null;
+        return new Iterator<SaiDlgAdapter>() {
+            SaiDlgAdapter g = null;
 
             private void peekNextGraph() {
                 try {
-                    g = new SaiDlg(bridge.load(in));
+                    DLG dlg = bridge.load(in);
+                    if(dlg instanceof TreeDLG)
+                        g = new SaiTreeDlg((TreeDLG)dlg);
+                   else g = new SaiDlg(dlg);
                 } catch (Exception e) { g = null; }
             }
 
@@ -41,9 +45,9 @@ public class GMLUtil {
             }
 
             @Override
-            public SaiDlg next() {
+            public SaiDlgAdapter next() {
                 if(g == null) peekNextGraph();
-                SaiDlg ret = g;
+                SaiDlgAdapter ret = g;
                 g = null;
                 return ret;
             }
