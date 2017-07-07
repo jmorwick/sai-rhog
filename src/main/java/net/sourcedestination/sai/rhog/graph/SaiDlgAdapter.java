@@ -12,6 +12,9 @@ import java.util.stream.Stream;
  *  An adapter to the SAI Graph interface for RhoG directed labeled graph objects as SAI.
  *  Node ids are preserved whereas edge id's are the sum of the source node id multiplied
  *  by the number of nodes and the target node id.
+ *
+ *  Any class implementing this interface must also extend DLG. This will be relied on in a way that
+ *  can't be checked at compile time and will result in runtime casting errors if not followed.
  */
 public interface SaiDlgAdapter extends Graph {
 

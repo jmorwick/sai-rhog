@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by jmorwick on 6/30/17.
  */
-public class DLGFactory implements GraphFactory<SaiDlgAdapter> {
+public class DLGFactory implements GraphFactory<SaiDlg> {
 
     private final String featureName;
     private final String defaultLabel;
@@ -26,6 +26,11 @@ public class DLGFactory implements GraphFactory<SaiDlgAdapter> {
     public DLGFactory(String featureName, String defaultLabel) {
         this.featureName = featureName;
         this.defaultLabel = defaultLabel;
+    }
+
+    public DLGFactory() {
+        featureName = "";
+        defaultLabel = "";
     }
 
     @Override
