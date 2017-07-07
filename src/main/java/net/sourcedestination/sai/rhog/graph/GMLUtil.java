@@ -17,41 +17,7 @@ import java.util.Iterator;
 public class GMLUtil {
 
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
-        final GMLBridge bridge = new GMLBridge();
-        return new Iterator<SaiDlgAdapter>() {
-            SaiDlgAdapter g = null;
-
-            private void peekNextGraph() {
-                try {
-                    DLG dlg = bridge.load(in);
-                    if(dlg instanceof TreeDLG)
-                        g = new SaiTreeDlg((TreeDLG)dlg);
-                   else g = new SaiDlg(dlg);
-                } catch (Exception e) { g = null; }
-            }
-
-            @Override
-            public boolean hasNext() {
-                try {
-                    if(!in.ready()) return false;
-                    if(g == null) {
-                        peekNextGraph();
-                        if(g == null) return false;
-                    }
-                    return true;
-                } catch(Exception e) {
-                    return false;
-                }
-            }
-
-            @Override
-            public SaiDlgAdapter next() {
-                if(g == null) peekNextGraph();
-                SaiDlgAdapter ret = g;
-                g = null;
-                return ret;
-            }
-        };
+        return FileFormatUtil.fileToDLGs(in, new GMLBridge()::load);
     }
 
     public static String dlgToGml(DLG g) {
