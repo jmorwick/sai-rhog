@@ -1,8 +1,6 @@
 package net.sourcedestination.sai.rhog.graph;
 
-import com.google.common.collect.Sets;
 import dlg.core.DLG;
-import dlg.core.TreeDLG;
 import net.sourcedestination.sai.graph.*;
 import org.junit.Test;
 
@@ -28,7 +26,7 @@ public class GMLUtilTest {
         File f = new File(getClass().getClassLoader().getResource("sponge-instances.gml").getFile());
         BufferedReader in = new BufferedReader(new FileReader(f));
         Set<DLG> graphs = new HashSet<>();
-        for(Iterator<SaiDlgAdapter> i = GMLUtil.gmlCollectionToDLG(in);
+        for(Iterator<SaiDlgAdapter> i = GMLPopulator.gmlCollectionToDLG(in);
             i.hasNext();
             graphs.add((DLG)i.next()));
 
@@ -37,8 +35,8 @@ public class GMLUtilTest {
 
     @Test
     public void testSaveLoadGML() {
-        GraphSerializer serializer = GMLUtil::saiToGml;
-        GraphDeserializer<SaiDlg> deserializer = GMLUtil::gmlToDlg;
+        GraphSerializer serializer = GMLPopulator::saiToGml;
+        GraphDeserializer<SaiDlg> deserializer = GMLPopulator::gmlToDlg;
         MutableGraph g = new MutableGraph();
         g.addNode(0);
         g.addNode(1);

@@ -20,7 +20,6 @@ public class FileFormatUtil {
         return sw.getBuffer().toString();
     }
 
-
     public static Iterator<SaiDlgAdapter> fileToDLGs(final BufferedReader in, DLGReader reader) {
         return new Iterator<SaiDlgAdapter>() {
             SaiDlgAdapter g = null;

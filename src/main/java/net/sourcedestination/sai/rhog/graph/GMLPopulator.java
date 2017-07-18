@@ -3,18 +3,23 @@ package net.sourcedestination.sai.rhog.graph;
 import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
 import dlg.core.TreeDLG;
+import net.sourcedestination.sai.db.DBInterface;
 import net.sourcedestination.sai.graph.Graph;
+import net.sourcedestination.sai.task.DatabasePopulator;
+import net.sourcedestination.sai.task.Task;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by jmorwick on 6/30/17.
  */
-public class GMLUtil {
+public class GMLPopulator extends DatabasePopulator {
 
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
         return FileFormatUtil.fileToDLGs(in, new GMLBridge()::load);
@@ -38,5 +43,22 @@ public class GMLUtil {
     /** reference this static method as a serializer object where needed */
     public static String saiToGml(Graph g) {
         return saiToGml(g,"","");
+    }
+
+    public static int countGraphsInGmlFile(Reader in) {
+        Scanner s = new Scanner(in);
+        s.useDelimiter("\\s*graph\\s*\\[");
+        int instances = 0;
+        for(;s.hasNext();s.next()) instances++;
+        return instances;
+    }
+    public GMLPopulator(File gml) throws IOException {
+        super(
+                StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                        gmlCollectionToDLG(new BufferedReader(new FileReader(gml))),
+                        Spliterator.ORDERED),
+                        false),  // not parallel
+                countGraphsInGmlFile(new FileReader(gml))
+        );
     }
 }
