@@ -1,7 +1,12 @@
 package net.sourcedestination.sai.rhog.graph;
 
 import dlg.core.DLG;
+import net.sourcedestination.sai.db.BasicDBInterface;
+import net.sourcedestination.sai.db.DBInterface;
 import net.sourcedestination.sai.graph.*;
+import net.sourcedestination.sai.reporting.Log;
+import net.sourcedestination.sai.task.DBPopulator;
+import net.sourcedestination.sai.task.Task;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -10,6 +15,7 @@ import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by jmorwick on 7/1/17.
  */
-public class GMLUtilTest {
+public class GMLPopulatorTest {
 
 
     @Test
@@ -31,6 +37,24 @@ public class GMLUtilTest {
             graphs.add((DLG)i.next()));
 
         assertEquals(503, graphs.size());
+    }
+
+    @Test
+    public void testPopulatorAsync() throws Exception {
+        File f = new File(getClass().getClassLoader().getResource("sponge-instances.gml").getFile());
+        assertEquals(503, GMLPopulator.countGraphsInGmlFile(new FileReader(f)));
+        DBInterface db = new BasicDBInterface();
+        DBPopulator pop = new GMLPopulator(f);
+        Task t = pop.apply(db);
+        assertEquals(0, db.getDatabaseSize());
+        assertEquals(0, t.getProgressUnits());
+        assertEquals(503, t.getTotalProgressUnits());
+        assertTrue(0.0001 > t.getPercentageDone());
+        CompletableFuture<Log> future = CompletableFuture.supplyAsync(t);
+        while(!future.isDone()) Thread.sleep(100);
+        assertEquals(503, db.getDatabaseSize());
+        assertEquals(503, t.getProgressUnits());
+        assertTrue(t.getPercentageDone() > 0.99999 && t.getPercentageDone() < 1.000001);
     }
 
     @Test

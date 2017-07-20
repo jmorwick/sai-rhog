@@ -5,7 +5,7 @@ import dlg.core.DLG;
 import dlg.core.TreeDLG;
 import net.sourcedestination.sai.db.DBInterface;
 import net.sourcedestination.sai.graph.Graph;
-import net.sourcedestination.sai.task.DatabasePopulator;
+import net.sourcedestination.sai.task.DBPopulator;
 import net.sourcedestination.sai.task.Task;
 
 import java.io.*;
@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 /**
  * Created by jmorwick on 6/30/17.
  */
-public class GMLPopulator extends DatabasePopulator {
+public class GMLPopulator extends DBPopulator {
 
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
         return FileFormatUtil.fileToDLGs(in, new GMLBridge()::load);
