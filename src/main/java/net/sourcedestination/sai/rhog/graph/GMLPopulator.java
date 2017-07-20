@@ -21,6 +21,9 @@ import java.util.stream.StreamSupport;
  */
 public class GMLPopulator extends DBPopulator {
 
+    private File gmlFile;
+    private int numGraphs;
+
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
         return FileFormatUtil.fileToDLGs(in, new GMLBridge()::load);
     }
@@ -52,13 +55,22 @@ public class GMLPopulator extends DBPopulator {
         for(;s.hasNext();s.next()) instances++;
         return instances;
     }
-    public GMLPopulator(File gml) throws IOException {
-        super(
-                StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-                        gmlCollectionToDLG(new BufferedReader(new FileReader(gml))),
-                        Spliterator.ORDERED),
-                        false),  // not parallel
-                countGraphsInGmlFile(new FileReader(gml))
-        );
+
+    public GMLPopulator(File gmlFile) throws IOException {
+        this.gmlFile = gmlFile;
+        this.numGraphs = countGraphsInGmlFile(new FileReader(gmlFile));
+    }
+
+    @Override
+    public int getNumGraphs() { return numGraphs; }
+
+    @Override
+    public Stream<Graph> getGraphStream() {
+        try {
+            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
+                    gmlCollectionToDLG(new BufferedReader(new FileReader(gmlFile))),
+                    Spliterator.ORDERED),
+                    false);
+        } catch(IOException e) { throw new IllegalStateException("Could not open file: " + gmlFile); }
     }
 }
