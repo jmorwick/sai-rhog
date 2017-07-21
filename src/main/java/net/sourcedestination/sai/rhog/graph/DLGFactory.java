@@ -47,7 +47,7 @@ public class DLGFactory implements GraphFactory<SaiDlg> {
             nodeIdMap.put(nodeIds.get(i), i);
         }
         g.getEdgeIDs().forEach(eid -> {
-            Feature f = g.getEdgeFeature(featureName, nodeIds.get(eid));
+            Feature f = g.getEdgeFeature(featureName, eid);
             String labelValue = f == null ? defaultLabel : f.getValue();
             Label l = null;
             try { l = new Label(labelValue); } catch(Exception e) {}
