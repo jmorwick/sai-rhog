@@ -5,7 +5,7 @@ import net.sourcedestination.sai.db.BasicDBInterface;
 import net.sourcedestination.sai.db.DBInterface;
 import net.sourcedestination.sai.rhog.graph.GMLPopulator;
 import net.sourcedestination.sai.rhog.graph.SaiDlgAdapter;
-import net.sourcedestination.sai.task.Task;
+import net.sourcedestination.sai.util.Task;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -34,11 +34,13 @@ public class ConnectedStatTest {
             db.addGraph(i.next()));
 
         ConnectedStat stat = new ConnectedStat();
-        Task<Double> t = stat.apply(db);
-        Double result = t.get();
+        double result = (double)db.getGraphIDStream()
+                .map(db::retrieveGraph)
+                .filter(stat::test)
+                .count()
+                / db.getDatabaseSize();
         assertTrue(0.99999999 < result);
         assertTrue(1.00000001 > result);
-        assertTrue(t.getPercentageDone() > 0.9999999);
     }
 
 }

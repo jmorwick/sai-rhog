@@ -1,7 +1,10 @@
 package net.sourcedestination.sai.rhog.graph;
 
 import dlg.core.DLG;
-import net.sourcedestination.sai.graph.*;
+import net.sourcedestination.sai.db.graph.Feature;
+import net.sourcedestination.sai.db.graph.Graph;
+import net.sourcedestination.sai.db.graph.GraphTransformation;
+import net.sourcedestination.sai.db.graph.MutableGraph;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +18,7 @@ public class DLGFactoryTest {
 
     @Test
     public void testConvertToDLG() {
-        GraphFactory<SaiDlg> f = new DLGFactory();
+        GraphTransformation<SaiDlg> f = new DLGFactory();
         MutableGraph g = new MutableGraph();
         g.addNode(0);
         g.addNode(1);
@@ -27,7 +30,7 @@ public class DLGFactoryTest {
         g.addEdgeFeature(0, new Feature("", "baz"));
         g.addEdgeFeature(1, new Feature("", "bazs"));
 
-        Graph g2 = f.copy(g);
+        Graph g2 = ((DLGFactory) f).apply(g);
 
         assertNotNull(g2);
         assertTrue(g2 instanceof SaiDlgAdapter);

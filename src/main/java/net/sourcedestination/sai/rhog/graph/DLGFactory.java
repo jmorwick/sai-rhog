@@ -1,10 +1,9 @@
 package net.sourcedestination.sai.rhog.graph;
 
-import dlg.core.DLG;
 import dlg.util.Label;
-import net.sourcedestination.sai.graph.Feature;
-import net.sourcedestination.sai.graph.Graph;
-import net.sourcedestination.sai.graph.GraphFactory;
+import net.sourcedestination.sai.db.graph.Feature;
+import net.sourcedestination.sai.db.graph.Graph;
+import net.sourcedestination.sai.db.graph.GraphTransformation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +13,7 @@ import java.util.Map;
 /**
  * Created by jmorwick on 6/30/17.
  */
-public class DLGFactory implements GraphFactory<SaiDlg> {
+public class DLGFactory implements GraphTransformation<SaiDlg> {
 
     private final String featureName;
     private final String defaultLabel;
@@ -34,7 +33,7 @@ public class DLGFactory implements GraphFactory<SaiDlg> {
     }
 
     @Override
-    public SaiDlg copy(Graph g) {
+    public SaiDlg apply(Graph g) {
         List<Integer> nodeIds = new ArrayList<>(g.getNodeIDsSet());
         Map<Integer,Integer> nodeIdMap = new HashMap<>();
         SaiDlg gc = new SaiDlg(nodeIds.size());

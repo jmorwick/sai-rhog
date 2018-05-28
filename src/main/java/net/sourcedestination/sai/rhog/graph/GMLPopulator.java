@@ -2,11 +2,8 @@ package net.sourcedestination.sai.rhog.graph;
 
 import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
-import dlg.core.TreeDLG;
-import net.sourcedestination.sai.db.DBInterface;
-import net.sourcedestination.sai.graph.Graph;
-import net.sourcedestination.sai.task.DBPopulator;
-import net.sourcedestination.sai.task.Task;
+import net.sourcedestination.sai.db.DBPopulator;
+import net.sourcedestination.sai.db.graph.Graph;
 
 import java.io.*;
 import java.util.Iterator;
@@ -34,7 +31,7 @@ public class GMLPopulator extends DBPopulator {
 
     public static String saiToGml(Graph g, String featureName, String defaultLabel) {
         DLGFactory f = new DLGFactory(featureName, defaultLabel);
-        return dlgToGml(f.copy(g));
+        return dlgToGml(f.apply(g));
     }
 
     /** reference this static method as a deserializer object where needed */

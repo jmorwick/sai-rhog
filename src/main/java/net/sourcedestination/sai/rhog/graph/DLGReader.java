@@ -1,7 +1,7 @@
 package net.sourcedestination.sai.rhog.graph;
 
 import dlg.core.DLG;
-import net.sourcedestination.sai.graph.GraphDeserializer;
+import net.sourcedestination.sai.db.graph.GraphDeserializer;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -9,7 +9,7 @@ import java.io.StringReader;
 /**
  * Created by jmorwick on 7/2/17.
  */
-public interface DLGReader extends GraphDeserializer<SaiDlg> {
+public interface DLGReader extends GraphDeserializer {
 
     public default SaiDlg apply(String encoding) {
         try {

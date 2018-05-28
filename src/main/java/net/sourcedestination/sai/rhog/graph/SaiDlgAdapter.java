@@ -1,8 +1,8 @@
 package net.sourcedestination.sai.rhog.graph;
 
 import dlg.util.Label;
-import net.sourcedestination.sai.graph.Feature;
-import net.sourcedestination.sai.graph.Graph;
+import net.sourcedestination.sai.db.graph.Feature;
+import net.sourcedestination.sai.db.graph.Graph;
 
 import java.util.List;
 import java.util.stream.IntStream;

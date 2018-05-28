@@ -3,10 +3,9 @@ package net.sourcedestination.sai.rhog.graph;
 import dlg.core.DLG;
 import net.sourcedestination.sai.db.BasicDBInterface;
 import net.sourcedestination.sai.db.DBInterface;
-import net.sourcedestination.sai.graph.*;
-import net.sourcedestination.sai.reporting.Log;
-import net.sourcedestination.sai.task.DBPopulator;
-import net.sourcedestination.sai.task.Task;
+import net.sourcedestination.sai.db.DBPopulator;
+import net.sourcedestination.sai.db.graph.*;
+import net.sourcedestination.sai.util.Task;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -50,7 +49,7 @@ public class GMLPopulatorTest {
         assertEquals(0, t.getProgressUnits());
         assertEquals(503, t.getTotalProgressUnits());
         assertTrue(0.0001 > t.getPercentageDone());
-        CompletableFuture<Log> future = CompletableFuture.supplyAsync(t);
+        CompletableFuture future = CompletableFuture.supplyAsync(t);
         while(!future.isDone()) Thread.sleep(100);
         assertEquals(503, db.getDatabaseSize());
         assertEquals(503, t.getProgressUnits());
@@ -60,7 +59,7 @@ public class GMLPopulatorTest {
     @Test
     public void testSaveLoadGML() {
         GraphSerializer serializer = GMLPopulator::saiToGml;
-        GraphDeserializer<SaiDlg> deserializer = GMLPopulator::gmlToDlg;
+        GraphDeserializer deserializer = GMLPopulator::gmlToDlg;
         MutableGraph g = new MutableGraph();
         g.addNode(0);
         g.addNode(1);
