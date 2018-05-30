@@ -2,10 +2,12 @@ package net.sourcedestination.sai.rhog.graph;
 
 import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
+import jdk.nashorn.api.scripting.URLReader;
 import net.sourcedestination.sai.db.DBPopulator;
 import net.sourcedestination.sai.db.graph.Graph;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Spliterator;
@@ -18,7 +20,7 @@ import java.util.stream.StreamSupport;
  */
 public class GMLPopulator extends DBPopulator {
 
-    private File gmlFile;
+    private Reader gmlFile;
     private int numGraphs;
 
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
@@ -54,8 +56,13 @@ public class GMLPopulator extends DBPopulator {
     }
 
     public GMLPopulator(File gmlFile) throws IOException {
-        this.gmlFile = gmlFile;
         this.numGraphs = countGraphsInGmlFile(new FileReader(gmlFile));
+        this.gmlFile = new FileReader(gmlFile);
+    }
+
+    public GMLPopulator(URL gmlFile) throws IOException {
+        this.numGraphs = countGraphsInGmlFile(new URLReader(gmlFile));
+        this.gmlFile = new URLReader(gmlFile);
     }
 
     @Override
@@ -63,11 +70,9 @@ public class GMLPopulator extends DBPopulator {
 
     @Override
     public Stream<Graph> getGraphStream() {
-        try {
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-                    gmlCollectionToDLG(new BufferedReader(new FileReader(gmlFile))),
+                    gmlCollectionToDLG(new BufferedReader((gmlFile))),
                     Spliterator.ORDERED),
                     false);
-        } catch(IOException e) { throw new IllegalStateException("Could not open file: " + gmlFile); }
     }
 }
