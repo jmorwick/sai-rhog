@@ -5,6 +5,7 @@ import dlg.core.DLG;
 import jdk.nashorn.api.scripting.URLReader;
 import net.sourcedestination.sai.db.DBPopulator;
 import net.sourcedestination.sai.db.graph.Graph;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
@@ -19,6 +20,8 @@ import java.util.stream.StreamSupport;
  * Created by jmorwick on 6/30/17.
  */
 public class GMLPopulator extends DBPopulator {
+
+    private static Logger logger = Logger.getLogger(GMLPopulator.class);
 
     private Reader gmlFile;
     private int numGraphs;
@@ -71,7 +74,20 @@ public class GMLPopulator extends DBPopulator {
     @Override
     public Stream<Graph> getGraphStream() {
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-                    gmlCollectionToDLG(new BufferedReader((gmlFile))),
+                    gmlCollectionToDLG(new BufferedReader((gmlFile)) {
+                        // rhog lib uses .ready() to see if data is left in the stream.
+                        // this isn't the default behavior of this function when dealing with streams other than files,
+                        // so this fixes it to work that way.
+                        public boolean ready() {
+                            int b = -1;
+                            try {
+                                mark(2);
+                                b = read();
+                                reset();
+                            } catch(IOException e) {}
+                            return b != -1;
+                        }
+                    }),
                     Spliterator.ORDERED),
                     false);
     }

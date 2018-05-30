@@ -4,6 +4,7 @@ import dlg.bridges.DLGWriter;
 import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
 import dlg.core.TreeDLG;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.StringWriter;
@@ -13,10 +14,16 @@ import java.util.Iterator;
  * Created by jmorwick on 7/2/17.
  */
 public class FileFormatUtil {
+
+    private static Logger logger = Logger.getLogger(GMLPopulator.class);
+
     public static String serialize(DLG g, DLGWriter bridge) {
         StringWriter sw = new StringWriter();
         try { bridge.save(g, sw); }
-        catch (Exception e) { return null; }
+        catch (Exception e) {
+            logger.error("can'tserialize", e);
+            return null;
+        }
         return sw.getBuffer().toString();
     }
 
@@ -27,22 +34,26 @@ public class FileFormatUtil {
             private void peekNextGraph() {
                 try {
                     DLG dlg = reader.load(in);
-                    if(dlg instanceof TreeDLG)
+                    if(dlg != null && dlg instanceof TreeDLG)
                         g = new SaiTreeDlg((TreeDLG)dlg);
-                    else g = new SaiDlg(dlg);
-                } catch (Exception e) { g = null; }
+                    else if(dlg != null)
+                        g = new SaiDlg(dlg);
+                } catch (Exception e) {
+                    logger.error("can't peek at next", e);
+                    g = null;
+                }
             }
 
             @Override
             public boolean hasNext() {
                 try {
-                    if(!in.ready()) return false;
                     if(g == null) {
                         peekNextGraph();
                         if(g == null) return false;
                     }
                     return true;
                 } catch(Exception e) {
+                    logger.error("can't see if next exists", e);
                     return false;
                 }
             }
