@@ -1,4 +1,4 @@
-package net.sourcedestination.sai.rhog.stats;
+package net.sourcedestination.sai.rhog.metrics;
 
 import dlg.core.operations.GraphTypeChecker;
 import net.sourcedestination.sai.analysis.metrics.types.GraphType;
@@ -9,15 +9,15 @@ import net.sourcedestination.sai.rhog.graph.SaiDlg;
 /**
  * Created by jmorwick on 7/7/17.
  */
-public class DagsStat implements GraphType {
+public class TreesMetric implements GraphType {
 
     private final DLGFactory factory;
 
-    public DagsStat() {
+    public TreesMetric() {
         factory = new DLGFactory();
     }
 
     public boolean test(Graph g) {
-        return GraphTypeChecker.isDAG(g instanceof SaiDlg ? (SaiDlg)g : factory.apply(g));
+        return GraphTypeChecker.isTree(g instanceof SaiDlg ? (SaiDlg)g : factory.apply(g));
     }
 }

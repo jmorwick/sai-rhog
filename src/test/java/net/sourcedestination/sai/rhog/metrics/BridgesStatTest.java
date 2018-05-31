@@ -1,11 +1,10 @@
-package net.sourcedestination.sai.rhog.stats;
+package net.sourcedestination.sai.rhog.metrics;
 
 import dlg.core.DLG;
 import net.sourcedestination.sai.db.BasicDBInterface;
 import net.sourcedestination.sai.db.DBInterface;
 import net.sourcedestination.sai.rhog.graph.GMLPopulator;
 import net.sourcedestination.sai.rhog.graph.SaiDlgAdapter;
-import net.sourcedestination.sai.util.Task;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -16,12 +15,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jmorwick on 7/21/17.
  */
-public class ConnectedStatTest {
+public class BridgesStatTest {
 
     @Test
     public void testLoadGMLFile() throws Exception {
@@ -33,14 +31,15 @@ public class ConnectedStatTest {
             i.hasNext();
             db.addGraph(i.next()));
 
-        ConnectedStat stat = new ConnectedStat();
+        BridgesMetric stat = new BridgesMetric();
+
         double result = (double)db.getGraphIDStream()
                 .map(db::retrieveGraph)
-                .filter(stat::test)
-                .count()
+                .mapToDouble(stat::apply)
+                .sum()
                 / db.getDatabaseSize();
-        assertTrue(0.99999999 < result);
-        assertTrue(1.00000001 > result);
+        assertTrue(40.0 < result);
+        assertTrue(41.0 > result);
     }
 
 }

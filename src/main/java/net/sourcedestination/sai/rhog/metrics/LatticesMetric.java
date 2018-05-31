@@ -1,24 +1,23 @@
-package net.sourcedestination.sai.rhog.stats;
+package net.sourcedestination.sai.rhog.metrics;
 
-import dlg.core.operations.Connectivity;
+import dlg.core.operations.GraphTypeChecker;
 import net.sourcedestination.sai.analysis.metrics.types.GraphType;
 import net.sourcedestination.sai.db.graph.Graph;
 import net.sourcedestination.sai.rhog.graph.DLGFactory;
 import net.sourcedestination.sai.rhog.graph.SaiDlg;
 
-/**  TODO: add test
- *   TODO: comment / license
+/**
+ * Created by jmorwick on 7/7/17.
  */
-public class ConnectedStat implements GraphType {
+public class LatticesMetric implements GraphType {
 
     private final DLGFactory factory;
 
-    public ConnectedStat() {
+    public LatticesMetric() {
         factory = new DLGFactory();
     }
 
-    @Override
     public boolean test(Graph g) {
-        return Connectivity.isConnected(g instanceof SaiDlg ? (SaiDlg)g : factory.apply(g));
+        return GraphTypeChecker.isLattice(g instanceof SaiDlg ? (SaiDlg)g : factory.apply(g));
     }
 }

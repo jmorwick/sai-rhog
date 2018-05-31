@@ -1,4 +1,4 @@
-package net.sourcedestination.sai.rhog.stats;
+package net.sourcedestination.sai.rhog.metrics;
 
 import dlg.core.operations.Connectivity;
 import net.sourcedestination.sai.analysis.GraphMetric;
@@ -10,7 +10,7 @@ import net.sourcedestination.sai.rhog.graph.SaiDlg;
 /**  TODO: add test
  *   TODO: comment / license
  */
-public class BridgesStat implements GraphMetric {
+public class BridgesMetric implements GraphMetric {
 
     private int totalBridges = 0;
     private GraphTransformation<SaiDlg> factory = new DLGFactory();
