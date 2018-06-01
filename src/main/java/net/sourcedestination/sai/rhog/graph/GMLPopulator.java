@@ -23,8 +23,10 @@ public class GMLPopulator extends DBPopulator {
 
     private static Logger logger = Logger.getLogger(GMLPopulator.class);
 
-    private Reader gmlFile;
-    private int numGraphs;
+    private URL url = null;
+    private File file = null;
+
+    private int numGraphs = -1;
 
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
         return FileFormatUtil.fileToDLGs(in, new GMLBridge()::load);
@@ -58,23 +60,47 @@ public class GMLPopulator extends DBPopulator {
         return instances;
     }
 
-    public GMLPopulator(File gmlFile) throws IOException {
-        this.numGraphs = countGraphsInGmlFile(new FileReader(gmlFile));
-        this.gmlFile = new FileReader(gmlFile);
+    public GMLPopulator(File gmlFile) {
+        this.file = gmlFile;
     }
 
-    public GMLPopulator(URL gmlFile) throws IOException {
-        this.numGraphs = countGraphsInGmlFile(new URLReader(gmlFile));
-        this.gmlFile = new URLReader(gmlFile);
+    public GMLPopulator(URL gmlFile) {
+        this.url = gmlFile;
     }
 
     @Override
-    public int getNumGraphs() { return numGraphs; }
+    public int getNumGraphs() {
+        if (numGraphs == -1) {
+            if (url != null) {
+                numGraphs = countGraphsInGmlFile(new URLReader(url));
+            } else if (file != null) {
+                try {
+                    numGraphs = countGraphsInGmlFile(new FileReader(file));
+                } catch (FileNotFoundException e) {
+                    logger.error("can't create graph stream, no such file: " + file, e);
+                }
+
+            }
+        }
+        return numGraphs;
+    }
 
     @Override
     public Stream<Graph> getGraphStream() {
+        Reader r = null;
+        if(url != null) {
+            r = new URLReader(url);
+        } else if(file != null) {
+            try {
+                r = new FileReader(file);
+            } catch(FileNotFoundException e) {
+                logger.error("can't create graph stream, no such file: " +file, e);
+                return Stream.empty();
+            }
+
+        }
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-                    gmlCollectionToDLG(new BufferedReader((gmlFile)) {
+                    gmlCollectionToDLG(new BufferedReader((r)) {
                         // rhog lib uses .ready() to see if data is left in the stream.
                         // this isn't the default behavior of this function when dealing with streams other than files,
                         // so this fixes it to work that way.
