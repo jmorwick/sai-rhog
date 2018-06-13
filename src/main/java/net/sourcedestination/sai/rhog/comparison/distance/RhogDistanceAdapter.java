@@ -1,6 +1,7 @@
 package net.sourcedestination.sai.rhog.comparison.distance;
 
 import dlg.core.DLG;
+import dlg.ml.distance.BagOfLabelsDistance;
 import net.sourcedestination.sai.db.graph.Graph;
 import net.sourcedestination.sai.experiment.retrieval.GraphSimilarityMetric;
 import net.sourcedestination.sai.rhog.graph.DLGFactory;
@@ -26,5 +27,10 @@ public interface RhogDistanceAdapter extends GraphSimilarityMetric {
         catch (Exception e) { throw new RuntimeException(e); }
     }
 
-    public double distance(DLG g1, DLG g2) throws Exception;
+    double distance(DLG g1, DLG g2) throws Exception;
+
+    static RhogDistanceAdapter getBagOfLabelsDistance(boolean useVertexLabels, boolean useEdgeLabels) {
+        BagOfLabelsDistance d = new BagOfLabelsDistance(useVertexLabels, useEdgeLabels, null);
+        return d::distance;
+    }
 }
