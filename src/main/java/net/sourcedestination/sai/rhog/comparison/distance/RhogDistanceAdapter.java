@@ -16,13 +16,12 @@ public interface RhogDistanceAdapter extends GraphSimilarityMetric {
     @Override
     default Double apply(Graph g1, Graph g2) {
         DLGFactory f = new DLGFactory();
-
         SaiDlg sg1 = g1 instanceof SaiDlg ?
                 (SaiDlg)g1 :
                 f.apply(g1);
-        SaiDlg sg2 = g1 instanceof SaiDlg ?
-                (SaiDlg) g1 :
-                f.apply(g1);
+        SaiDlg sg2 = g2 instanceof SaiDlg ?
+                (SaiDlg) g2 :
+                f.apply(g2);
         try {return distance(sg1, sg2); }
         catch (Exception e) { throw new RuntimeException(e); }
     }
