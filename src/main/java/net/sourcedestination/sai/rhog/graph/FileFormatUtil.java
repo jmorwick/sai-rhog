@@ -1,27 +1,27 @@
 package net.sourcedestination.sai.rhog.graph;
 
 import dlg.bridges.DLGWriter;
-import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
 import dlg.core.TreeDLG;
-import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by jmorwick on 7/2/17.
  */
 public class FileFormatUtil {
 
-    private static Logger logger = Logger.getLogger(GMLPopulator.class);
+    private static Logger logger = Logger.getLogger(FileFormatUtil.class.getCanonicalName());
 
     public static String serialize(DLG g, DLGWriter bridge) {
         StringWriter sw = new StringWriter();
         try { bridge.save(g, sw); }
         catch (Exception e) {
-            logger.error("can'tserialize", e);
+            logger.log(Level.ALL, "can'tserialize", e);
             return null;
         }
         return sw.getBuffer().toString();
@@ -39,7 +39,7 @@ public class FileFormatUtil {
                     else if(dlg != null)
                         g = new SaiDlg(dlg);
                 } catch (Exception e) {
-                    logger.error("can't peek at next", e);
+                    logger.log(Level.ALL, "can't peek at next", e);
                     g = null;
                 }
             }
@@ -53,7 +53,7 @@ public class FileFormatUtil {
                     }
                     return true;
                 } catch(Exception e) {
-                    logger.error("can't see if next exists", e);
+                    logger.log(Level.ALL, "can't see if next exists", e);
                     return false;
                 }
             }

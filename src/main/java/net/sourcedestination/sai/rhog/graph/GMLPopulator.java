@@ -5,8 +5,9 @@ import dlg.core.DLG;
 import jdk.nashorn.api.scripting.URLReader;
 import net.sourcedestination.sai.db.DBPopulator;
 import net.sourcedestination.sai.db.graph.Graph;
-import org.apache.log4j.Logger;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.io.*;
 import java.net.URL;
 import java.util.Iterator;
@@ -21,7 +22,7 @@ import java.util.stream.StreamSupport;
  */
 public class GMLPopulator extends DBPopulator {
 
-    private static Logger logger = Logger.getLogger(GMLPopulator.class);
+    private static Logger logger = Logger.getLogger(GMLPopulator.class.getCanonicalName());
 
     private URL url = null;
     private File file = null;
@@ -77,7 +78,7 @@ public class GMLPopulator extends DBPopulator {
                 try {
                     numGraphs = countGraphsInGmlFile(new FileReader(file));
                 } catch (FileNotFoundException e) {
-                    logger.error("can't create graph stream, no such file: " + file, e);
+                    logger.log(Level.ALL, "can't create graph stream, no such file: " + file, e);
                 }
 
             }
@@ -94,7 +95,7 @@ public class GMLPopulator extends DBPopulator {
             try {
                 r = new FileReader(file);
             } catch(FileNotFoundException e) {
-                logger.error("can't create graph stream, no such file: " +file, e);
+                logger.log(Level.ALL, "can't create graph stream, no such file: " +file, e);
                 return Stream.empty();
             }
 
