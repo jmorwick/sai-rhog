@@ -30,7 +30,7 @@ public class GMLPopulator extends DBPopulator {
     private int numGraphs = -1;
 
     public static Iterator<SaiDlgAdapter> gmlCollectionToDLG(final BufferedReader in) {
-        return FileFormatUtil.fileToDLGs(in, new GMLBridge()::load);
+        return FileFormatUtil.fileToDLGs(new HackedReader(in), new GMLBridge()::load);
     }
 
     public static String dlgToGml(DLG g) {
@@ -101,20 +101,7 @@ public class GMLPopulator extends DBPopulator {
 
         }
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(
-                    gmlCollectionToDLG(new BufferedReader((r)) {
-                        // rhog lib uses .ready() to see if data is left in the stream.
-                        // this isn't the default behavior of this function when dealing with streams other than files,
-                        // so this fixes it to work that way.
-                        public boolean ready() {
-                            int b = -1;
-                            try {
-                                mark(2);
-                                b = read();
-                                reset();
-                            } catch(IOException e) {}
-                            return b != -1;
-                        }
-                    }),
+                    gmlCollectionToDLG(new HackedReader(r)),
                     Spliterator.ORDERED),
                     false);
     }

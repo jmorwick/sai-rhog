@@ -17,7 +17,10 @@ public interface DLGReader extends GraphDeserializer {
 
     public default SaiDlg apply(String encoding) {
         try {
-            return new SaiDlg(load(new BufferedReader(new StringReader(encoding))));
+            var in = new HackedReader(new StringReader(encoding));
+            var g = load(new BufferedReader(new StringReader(encoding)));
+            var label = in.getLabel();
+            return new SaiDlg(g, label);
         } catch(Exception e) {
             logger.log(Level.ALL, "error loading new DLG structure", e);
             return null;
