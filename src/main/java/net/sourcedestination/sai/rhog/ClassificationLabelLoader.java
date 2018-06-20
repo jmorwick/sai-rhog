@@ -4,8 +4,10 @@ import net.sourcedestination.sai.db.graph.Feature;
 import net.sourcedestination.sai.db.graph.Graph;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +16,10 @@ import java.util.function.Function;
 public class ClassificationLabelLoader implements Function<Graph,String> {
 
     private Map<String,String> labels = new HashMap<>();
+
+    public ClassificationLabelLoader(URL url) throws IOException {
+        this(url.openStream());
+    }
 
     public ClassificationLabelLoader(InputStream in) {
         BufferedReader rin = new BufferedReader(new InputStreamReader(in));
@@ -25,8 +31,13 @@ public class ClassificationLabelLoader implements Function<Graph,String> {
         });
     }
 
+    public String toString() {
+        return labels.toString();
+    }
+
     @Override
     public String apply(Graph g) {
-        return labels.get(g.getFeatures().filter(f -> f.getName().equals("label")).findFirst().get());
+        return labels.get(g.getFeatures()
+                .filter(f -> f.getName().equals("label")).findFirst().get().getValue());
     }
 }
