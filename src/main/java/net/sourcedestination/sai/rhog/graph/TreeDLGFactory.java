@@ -32,7 +32,9 @@ public class TreeDLGFactory implements GraphTransformation<SaiDlg> {
     public SaiDlg apply(Graph g) {
         List<Integer> nodeIds = new ArrayList<>(g.getNodeIDsSet());
         Map<Integer,Integer> nodeIdMap = new HashMap<>();
-        SaiDlg gc = new SaiDlg(nodeIds.size());
+        SaiDlg gc = new SaiDlg(nodeIds.size(),
+                g.getFeature("label") != null ?
+                        g.getFeature("label").getValue() : "");
         for(int i=0; i<nodeIds.size(); i++) {
             Feature f = g.getNodeFeature(featureName, nodeIds.get(i));
             String labelValue = f == null ? defaultLabel : f.getValue();

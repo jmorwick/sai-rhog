@@ -24,9 +24,7 @@ public interface SaiDlgAdapter extends Graph {
     public Label getEdge(int from, int to);
     public Label getVertex(int id);
 
-    public default String getLabelName() {
-        return "";
-    }
+    public String getLabelName();
 
     @Override
     public default Stream<Integer> getNodeIDs() {
@@ -42,10 +40,7 @@ public interface SaiDlgAdapter extends Graph {
 
     @Override
     public default Stream<Feature> getFeatures() {
-        return Stream.concat(
-                getAllEdgeLabels().stream().map(l -> new Feature(getLabelName(), l.get())),
-                getAllVertexLabels().stream().map(l -> new Feature(getLabelName(), l.get()))
-        );
+        return Stream.of(new Feature("label", getLabelName()));
     }
 
     @Override

@@ -65,10 +65,8 @@ public interface RhogDistanceAdapter extends GraphSimilarityMetric {
                         .collect(Collectors.toList());
                 List<Label> labels = graphs.stream()
                         .map(c::apply)
-                        .map(l -> {
-                            try{ return new Label(l);}
-                            catch(Exception e) {return null;}
-                        }).collect(Collectors.toList());
+                        .map(SaiDlg::labelFromString)
+                        .collect(Collectors.toList());
                 return null;
             }
         });

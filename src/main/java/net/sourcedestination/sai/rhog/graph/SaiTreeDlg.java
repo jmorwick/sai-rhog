@@ -7,11 +7,20 @@ import dlg.core.TreeDLG;
  */
 public class SaiTreeDlg extends TreeDLG implements SaiDlgAdapter {
 
-    public SaiTreeDlg(int n) {
-        super(n);
+    private final String label;
+
+
+    public String getLabelName() {
+        return label;
     }
 
-    public SaiTreeDlg(TreeDLG g) {
+    public SaiTreeDlg(int n, String label) {
+        super(n);
+        this.label = label;
+    }
+
+    public SaiTreeDlg(TreeDLG g, String label) {
         super(g);
+        this.label = label;
     }
 }
