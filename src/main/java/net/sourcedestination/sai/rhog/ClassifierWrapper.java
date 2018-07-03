@@ -9,6 +9,7 @@ import net.sourcedestination.sai.rhog.graph.DLGFactory;
 import net.sourcedestination.sai.rhog.graph.SaiDlg;
 import net.sourcedestination.sai.util.Task;
 
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class ClassifierWrapper  implements ClassificationModel {
@@ -28,10 +29,11 @@ public class ClassifierWrapper  implements ClassificationModel {
             if (g instanceof DLG)
                 return internalClassifier.predict((DLG) g).get();
             return internalClassifier.predict(factory.apply(g)).get();
-        } catch(Exception e) { throw new RuntimeException(e); }
+        } catch(Exception e) {
+            throw new RuntimeException(e); }
     }
 
-    public Task train(DBInterface db, ClassificationLabelLoader classes) {
+    public Task train(DBInterface db, Function<Graph,String> classes) {
         return () -> {
             try {
                 internalClassifier.train(
