@@ -1,6 +1,5 @@
 package net.sourcedestination.sai.rhog;
 
-import net.sourcedestination.sai.db.graph.Feature;
 import net.sourcedestination.sai.db.graph.Graph;
 
 import java.io.BufferedReader;
@@ -10,7 +9,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 public class ClassificationLabelLoader implements Function<Graph,String> {
