@@ -22,7 +22,6 @@ import dlg.ml.KNearestNeighbors;
 import dlg.ml.distance.BagOfLabelsDistance;
 
 import static net.sourcedestination.sai.experiment.retrieval.Retriever.simpleSequentialRetrieverFactory;
-import static net.sourcedestination.sai.db.GraphTransformingDBWrapper.wrap;
 import static net.sourcedestination.sai.experiment.retrieval.Retriever.rerankingRetriever;
 import static net.sourcedestination.sai.rhog.comparison.distance.RhogDistanceAdapter.getBagOfLabelsDistance;
 import static net.sourcedestination.sai.experiment.learning.ClassificationModelGenerator.knnClassifierGenerator;
@@ -45,17 +44,14 @@ task1.get();
 // find expected classifications
 var classes = new ClassificationLabelLoader(labelsUrl);
 
-// make db accessible to rhog library
-var rdb = wrap(db, dlgGen);
-
 // create model generator for k-NN
 var modelGen = knnClassifierGenerator(
   db -> rerankingRetriever(simpleSequentialRetrieverFactory(db), db, dist),
   k);
 
-// run leave-one-out classification experiment
-var experiment = new CrossValidatedClassificationExperiment(modelGen, rdb, "db1", classes);
-System.out.println(experiment.get());
 
+// run leave-one-out classification experiment
+var experiment = new CrossValidatedClassificationExperiment(modelGen, db, "db1", classes);
+System.out.println(experiment.get());
 
 /exit
