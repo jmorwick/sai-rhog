@@ -24,17 +24,17 @@ import dlg.ml.distance.BagOfLabelsDistance;
 import static net.sourcedestination.sai.experiment.retrieval.Retriever.simpleSequentialRetrieverFactory;
 import static net.sourcedestination.sai.db.GraphTransformingDBWrapper.wrap;
 import static net.sourcedestination.sai.experiment.retrieval.Retriever.rerankingRetriever;
-
+import static net.sourcedestination.sai.rhog.comparison.distance.RhogDistanceAdapter.getBagOfLabelsDistance;
+import static net.sourcedestination.sai.experiment.learning.ClassificationModelGenerator.knnClassifierGenerator;
 // experiment parameters
-var k = 5;
+var k = 1;
 var dataUrl = new URL("https://raw.githubusercontent.com/santiontanon/RHOG/master/data/gml/trains/trains-instances.gml");
 var labelsUrl = new URL("https://raw.githubusercontent.com/santiontanon/RHOG/master/data/gml/trains/trains-labels.txt");
 
 
 // initialize basic objects
 var dlgGen = new DLGFactory();
-var rdist = new BagOfLabelsDistance(true,true,null);
-RhogDistanceAdapter sdist = rdist::distance;
+var dist = getBagOfLabelsDistance(true,true);
 var db = new BasicDBInterface();
 
 // load data in to database
@@ -48,25 +48,14 @@ var classes = new ClassificationLabelLoader(labelsUrl);
 // make db accessible to rhog library
 var rdb = wrap(db, dlgGen);
 
-// create retriever for k-NN
-var sequentialRetriever = simpleSequentialRetrieverFactory(rdb);
-var rankByDist = rerankingRetriever(sequentialRetriever, rdb, sdist);
-
-// create model generator
-ClassificationModelGenerator modelGen = (db, classes) -> {
-  var classifier = new ClassifierWrapper(new KNearestNeighbors(k, rdist), dlgGen);
-System.out.println("training..."+db.getDatabaseSize());
-  classifier.train(db, classes).get();
-  return classifier;
-};
+// create model generator for k-NN
+var modelGen = knnClassifierGenerator(
+  db -> rerankingRetriever(simpleSequentialRetrieverFactory(db), db, dist),
+  k);
 
 // run leave-one-out classification experiment
 var experiment = new CrossValidatedClassificationExperiment(modelGen, rdb, "db1", classes);
 System.out.println(experiment.get());
-
-
-
-
 
 
 /exit
