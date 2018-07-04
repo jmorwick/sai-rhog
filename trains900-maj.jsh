@@ -28,8 +28,8 @@ import static net.sourcedestination.sai.experiment.retrieval.Retriever.reranking
 import static net.sourcedestination.sai.rhog.comparison.distance.RhogDistanceAdapter.getBagOfLabelsDistance;
 
 // experiment parameters
-var dataUrl = new URL("https://raw.githubusercontent.com/santiontanon/RHOG/master/data/gml/trains/trains-instances.gml");
-var labelsUrl = new URL("https://raw.githubusercontent.com/santiontanon/RHOG/master/data/gml/trains/trains-labels.txt");
+var dataUrl = new URL("https://raw.githubusercontent.com/santiontanon/RHOG/master/data/gml/trains900/trains900-instances.gml");
+var labelsUrl = new URL("https://raw.githubusercontent.com/santiontanon/RHOG/master/data/gml/trains900/trains900-labels.txt");
 
 
 // initialize basic objects
