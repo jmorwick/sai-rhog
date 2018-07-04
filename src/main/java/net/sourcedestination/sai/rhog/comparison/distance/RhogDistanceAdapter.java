@@ -2,10 +2,12 @@ package net.sourcedestination.sai.rhog.comparison.distance;
 
 import dlg.bridges.GMLBridge;
 import dlg.core.DLG;
+import dlg.core.PartialOrder;
 import dlg.core.refinement.RefinementOperator;
 import dlg.core.subsumption.Subsumption;
 import dlg.ml.distance.AUDistance;
 import dlg.ml.distance.BagOfLabelsDistance;
+import dlg.ml.distance.KashimaKernelSparse;
 import dlg.ml.distance.NormalizedCompressionDistance;
 import dlg.util.Label;
 import net.sourcedestination.funcles.tuple.Tuple;
@@ -41,6 +43,11 @@ public interface RhogDistanceAdapter extends GraphSimilarityMetric {
     }
 
     double distance(DLG g1, DLG g2) throws Exception;
+
+    static RhogDistanceAdapter getKashimaDistance(double p, PartialOrder order) {
+        KashimaKernelSparse k = new KashimaKernelSparse(p, order);
+        return k::distance;
+    }
 
     static RhogDistanceAdapter getBagOfLabelsDistance(boolean useVertexLabels, boolean useEdgeLabels) {
         BagOfLabelsDistance d = new BagOfLabelsDistance(useVertexLabels, useEdgeLabels, null);

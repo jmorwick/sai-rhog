@@ -45,9 +45,23 @@
         <dependency>
             <groupId>github.santiontanon</groupId>
             <artifactId>rhog</artifactId>
-            <version>2017-07-01</version>
+            <version>2018-07-04</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/rhog-2017-07-01.jar</systemPath>
+            <systemPath>${basedir}/lib/rhog-2018-07-04.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cern.colt</groupId>
+            <artifactId>colt</artifactId>
+            <version>1.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/colt.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cern.concurrent</groupId>
+            <artifactId>concurrent</artifactId>
+            <version>2018-07-04</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/concurrent.jar</systemPath>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
         <dependency>
